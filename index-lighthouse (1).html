@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>김지은 — 개인 웹사이트</title>
+<meta name="description" content="김지은의 작업과 기록을 모아둔 개인 웹사이트">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ── 색상: 폭풍 치는 밤바다와 등대 불빛 ── */
+  :root {
+    --night: #05070C;       /* 첫 화면의 밤하늘 */
+    --lamp: #FFC27A;        /* 등대 불빛 */
+    --foam: #EFE6D8;        /* 첫 화면 글자 */
+    --bg: #E9ECEE;          /* 아래 본문: 안개 낀 낮 */
+    --surface: #F4F5F6;
+    --ink: #17202B;
+    --muted: #56626E;
+    --line: #C7CED5;
+    --accent: #9A5B12;      /* 등대 불빛을 낮에 보이게 한 색 */
+    --serif: "Gowun Batang", "Nanum Myeongjo", "AppleMyungjo", serif;
+    --sans: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    color-scheme: light;
+    box-sizing: border-box;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1017; --surface: #111823; --ink: #E3E8EE; --muted: #93A0AD;
+      --line: #223040; --accent: #FFC27A; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B1017; --surface: #111823; --ink: #E3E8EE; --muted: #93A0AD;
+    --line: #223040; --accent: #FFC27A; color-scheme: dark;
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(4rem + env(safe-area-inset-top, 0px)); }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.75 var(--sans); -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; border-radius: 2px; }
+
+  /* ── 첫 화면: 등대 ── */
+  .hero {
+    position: relative; min-height: 100svh; background: var(--night); color: var(--foam);
+    display: flex; flex-direction: column; overflow: hidden; isolation: isolate;
+  }
+  .hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
+  .hero-nav {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+    max-width: 68rem; width: 100%; margin: 0 auto;
+    padding: calc(1.2rem + env(safe-area-inset-top, 0px)) 1.5rem 1rem;
+  }
+  .hero-nav .mark { font-family: var(--serif); font-weight: 700; color: var(--foam); text-decoration: none; }
+  .hero-nav ul { display: flex; gap: 1.25rem; list-style: none; margin: 0; padding: 0; font-size: .925rem; }
+  .hero-nav ul a { color: rgba(239, 230, 216, .7); text-decoration: none; }
+  .hero-nav ul a:hover { color: var(--foam); }
+  .hero-body {
+    flex: 1; display: flex; flex-direction: column; justify-content: flex-end;
+    max-width: 68rem; width: 100%; margin: 0 auto;
+    padding: 2rem 1.5rem calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  }
+  .hero h1 {
+    font-family: var(--serif); font-weight: 700; margin: 0;
+    font-size: clamp(3rem, 11vw, 7rem); line-height: 1.02; letter-spacing: -.02em;
+    text-shadow: 0 0 40px rgba(255, 194, 122, .18);
+  }
+  .hero .intro { font-family: var(--serif); font-size: clamp(1.15rem, 2.8vw, 1.45rem); line-height: 1.6; margin: 1.5rem 0 0; max-width: 26ch; color: rgba(239, 230, 216, .86); }
+  .hero .now { margin: 2rem 0 0; font-size: .9rem; color: rgba(239, 230, 216, .6); display: flex; align-items: center; gap: .6rem; }
+  .hero .now::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: var(--lamp); box-shadow: 0 0 10px var(--lamp); animation: blink 6s ease-in-out infinite; }
+  @keyframes blink { 0%, 100% { opacity: .35; } 8%, 14% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .hero .now::before { animation: none; } }
+
+  /* ── 본문 ── */
+  main { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem; }
+  section { padding: 4.5rem 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: 0; }
+  h2 { font-family: var(--serif); font-size: 1.75rem; font-weight: 700; margin: 0 0 1.75rem; }
+  .about p { margin: 0 0 1.1rem; max-width: 60ch; }
+
+  .projects { list-style: none; margin: 0; padding: 0; }
+  .projects li { padding: 1.5rem 0; border-top: 1px solid var(--line); }
+  .projects li:first-child { border-top: 0; padding-top: 0; }
+  .projects h3 { margin: 0; font-size: 1.15rem; font-weight: 600; }
+  .projects h3 a { color: var(--ink); text-decoration: none; }
+  .projects h3 a:hover { color: var(--accent); text-decoration: underline; }
+  .projects p { margin: .35rem 0 .6rem; color: var(--muted); max-width: 60ch; }
+  .tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .tags span { font-size: .8rem; padding: .15rem .6rem; border-radius: 4px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); }
+
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .timeline li { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; padding: .9rem 0; }
+  .timeline time { color: var(--muted); font-size: .925rem; font-variant-numeric: tabular-nums; }
+  .timeline strong { font-weight: 600; }
+  .timeline p { margin: .15rem 0 0; color: var(--muted); }
+  .skills { margin: 2.5rem 0 0; display: grid; gap: 1rem; }
+  .skills div { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; }
+  .skills dt { color: var(--muted); font-size: .925rem; }
+  .skills dd { margin: 0; }
+
+  .contact p { margin: 0 0 1.5rem; max-width: 50ch; }
+  .email { font-family: var(--serif); font-size: clamp(1.4rem, 5vw, 2rem); font-weight: 700; color: var(--ink); text-decoration-color: var(--accent); text-decoration-thickness: 2px; word-break: break-all; }
+  .links { display: flex; flex-wrap: wrap; gap: 1.5rem; list-style: none; padding: 0; margin: 2rem 0 0; }
+  footer { max-width: 46rem; margin: 0 auto; padding: 2rem 1.5rem calc(3rem + env(safe-area-inset-bottom, 0px)); color: var(--muted); font-size: .85rem; }
+
+  @media (max-width: 34rem) {
+    .timeline li, .skills div { grid-template-columns: 1fr; gap: .1rem; }
+    .hero-nav .mark { display: none; }
+    .hero-nav { justify-content: center; }
+    .hero-nav ul { gap: 1rem; font-size: .875rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ✏️ 첫 화면: 이름과 한 줄 소개를 바꾸세요 -->
+<header class="hero" id="top">
+  <canvas id="sea" aria-hidden="true"></canvas>
+  <nav class="hero-nav" aria-label="주요 메뉴">
+    <a class="mark" href="#top">김지은</a>
+    <ul>
+      <li><a href="#about">소개</a></li>
+      <li><a href="#work">작업물</a></li>
+      <li><a href="#career">경력</a></li>
+      <li><a href="#contact">연락처</a></li>
+    </ul>
+  </nav>
+  <div class="hero-body">
+    <h1>김지은</h1>
+    <p class="intro">어두운 바다에서도 길을 잃지 않도록, 화면 하나하나를 비추는 웹 개발자입니다.</p>
+    <p class="now">요즘은 접근성 좋은 웹 폼을 공부하고 있어요</p>
+  </div>
+</header>
+
+<main>
+  <!-- ✏️ 자기소개 -->
+  <section id="about" class="about">
+    <h2>소개</h2>
+    <p>서울에서 일하는 프런트엔드 개발자입니다. 디자인 전공으로 시작해 코드를 배우게 되었고, 지금은 보기 좋은 것과 쓰기 편한 것 사이의 균형을 찾는 일을 가장 좋아합니다.</p>
+    <p>일하지 않을 때는 바닷가 마을을 걷고, 등대 사진을 모읍니다.</p>
+  </section>
+
+  <!-- ✏️ 작업물: <li> 한 덩어리가 작업물 하나입니다. 복사해서 늘리세요 -->
+  <section id="work">
+    <h2>작업물</h2>
+    <ul class="projects">
+      <li>
+        <h3><a href="#">동네 도서관 좌석 알리미</a></h3>
+        <p>열람실 빈자리를 실시간으로 보여주는 모바일 웹. 하루 평균 300명이 사용했습니다.</p>
+        <div class="tags"><span>React</span><span>Firebase</span></div>
+      </li>
+      <li>
+        <h3><a href="#">한국의 등대 지도</a></h3>
+        <p>전국 등대의 위치와 불빛 주기를 지도에 모아 보여주는 개인 프로젝트.</p>
+        <div class="tags"><span>JavaScript</span><span>Leaflet</span></div>
+      </li>
+      <li>
+        <h3><a href="#">작은 가게 메뉴판 템플릿</a></h3>
+        <p>코드를 몰라도 글자만 바꿔 쓸 수 있는 카페용 한 페이지 메뉴판.</p>
+        <div class="tags"><span>HTML</span><span>CSS</span></div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ✏️ 경력과 기술 -->
+  <section id="career">
+    <h2>경력</h2>
+    <ol class="timeline" reversed>
+      <li><time>2024 – 현재</time><div><strong>○○스튜디오 · 프런트엔드 개발자</strong><p>예약 서비스 웹 화면 개발과 디자인 시스템 관리</p></div></li>
+      <li><time>2022 – 2024</time><div><strong>△△에이전시 · 웹 퍼블리셔</strong><p>기업 홈페이지 20여 건 제작</p></div></li>
+      <li><time>2018 – 2022</time><div><strong>□□대학교 · 시각디자인 전공</strong></div></li>
+    </ol>
+    <dl class="skills">
+      <div><dt>잘 다루는 것</dt><dd>HTML, CSS, JavaScript, React</dd></div>
+      <div><dt>쓸 줄 아는 것</dt><dd>TypeScript, Three.js, Figma, Git</dd></div>
+    </dl>
+  </section>
+
+  <!-- ✏️ 연락처 -->
+  <section id="contact" class="contact">
+    <h2>연락처</h2>
+    <p>함께 일하자는 제안, 작업물에 대한 질문 모두 반가워요. 메일로 연락 주세요.</p>
+    <a class="email" href="mailto:hello@example.com">hello@example.com</a>
+    <ul class="links">
+      <li><a href="https://github.com/kims-03">GitHub</a></li>
+      <li><a href="#">Instagram</a></li>
+      <li><a href="#">LinkedIn</a></li>
+    </ul>
+  </section>
+</main>
+
+<footer>© <span id="year">2026</span> 김지은</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// 첫 화면의 밤바다: 바위 위 등대, 돌아가는 불빛, 비, 가끔 치는 번개
+(() => {
+  const cv = document.getElementById('sea'), cx = cv.getContext('2d');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, dpr, drops = [], flash = 0, nextFlash = 4;
+  const PERIOD = 10;                       // 불빛이 한 바퀴 도는 시간(초)
+
+  function size() {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(W * H / 2600);
+    drops = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, v: 700 + Math.random() * 500, l: 8 + Math.random() * 14, a: .08 + Math.random() * .22 }));
+  }
+  addEventListener('resize', size); size();
+
+  // 등대의 위치와 크기 (화면 크기에 맞춤)
+  const tower = () => {
+    const s = Math.min(W, H) / 900, x = W * (W < 600 ? .78 : .74), sea = H * .74;
+    return { s, x, sea, top: sea - 330 * s * (W < 600 ? .8 : 1) };
+  };
+
+  function draw(t) {
+    const T = tower(), lampY = T.top - 18 * T.s, ang = (t / PERIOD) * Math.PI * 2;
+    // 하늘: 번개가 치면 구름 속이 잠깐 밝아짐
+    const sky = cx.createLinearGradient(0, 0, 0, T.sea);
+    sky.addColorStop(0, `rgb(${5 + 40 * flash},${7 + 46 * flash},${12 + 64 * flash})`);
+    sky.addColorStop(1, `rgb(${10 + 20 * flash},${14 + 24 * flash},${22 + 34 * flash})`);
+    cx.fillStyle = sky; cx.fillRect(0, 0, W, H);
+
+    // 빛줄기: 두 갈래가 마주 보며 돌아감. 옆으로 향할 때 길게, 이쪽을 볼 때 짧고 밝게
+    cx.save(); cx.globalCompositeOperation = 'lighter';
+    for (const k of [0, Math.PI]) {
+      const c = Math.cos(ang + k), toward = Math.max(0, Math.sin(ang + k));
+      const len = Math.max(W, H) * 1.3 * Math.abs(c), dir = Math.sign(c) || 1;
+      if (len < 10) continue;
+      const spread = (.05 + .5 * toward * toward) * len * .35 + 20 * T.s;
+      const g = cx.createLinearGradient(T.x, lampY, T.x + dir * len, lampY);
+      g.addColorStop(0, `rgba(255,194,122,${.32 + .3 * toward})`); g.addColorStop(1, 'rgba(255,194,122,0)');
+      cx.fillStyle = g; cx.beginPath();
+      cx.moveTo(T.x, lampY - 4 * T.s); cx.lineTo(T.x + dir * len, lampY - spread * .35 - 30 * T.s);
+      cx.lineTo(T.x + dir * len, lampY + spread * .35 + 30 * T.s); cx.lineTo(T.x, lampY + 4 * T.s); cx.fill();
+    }
+    // 불빛이 정면을 향하는 순간의 번쩍임
+    const face = Math.pow(Math.max(Math.sin(ang), Math.sin(ang + Math.PI)), 24);
+    const glow = cx.createRadialGradient(T.x, lampY, 0, T.x, lampY, (40 + 260 * face) * T.s);
+    glow.addColorStop(0, `rgba(255,220,170,${.9})`); glow.addColorStop(1, 'rgba(255,194,122,0)');
+    cx.fillStyle = glow; cx.beginPath(); cx.arc(T.x, lampY, (40 + 260 * face) * T.s, 0, 7); cx.fill();
+    cx.restore();
+
+    // 비: 빛줄기 안의 빗방울만 밝게
+    cx.lineCap = 'round';
+    for (const d of drops) {
+      const dx = d.x - T.x, dy = d.y - lampY, side = Math.sign(dx);
+      const c = Math.cos(ang), inBeam = Math.abs(dy) < Math.abs(dx) * .25 + 30 && Math.abs(dx) < Math.max(W, H) * 1.3 * Math.abs(c) && (side === Math.sign(c) || side === -Math.sign(c));
+      cx.strokeStyle = inBeam ? `rgba(255,214,160,${d.a * 2.6})` : `rgba(190,205,225,${d.a * (.5 + flash * 2)})`;
+      cx.lineWidth = 1; cx.beginPath(); cx.moveTo(d.x, d.y); cx.lineTo(d.x - d.l * .35, d.y + d.l); cx.stroke();
+    }
+
+    // 바다: 겹겹의 물결 실루엣
+    for (let layer = 0; layer < 3; layer++) {
+      const y0 = T.sea + layer * 26 * T.s + 6, amp = (6 + layer * 5) * T.s;
+      cx.fillStyle = `rgb(${4 + 10 * flash},${8 + 12 * flash - layer},${14 + 16 * flash - layer * 2})`;
+      cx.beginPath(); cx.moveTo(0, H);
+      for (let x = 0; x <= W + 20; x += 16) cx.lineTo(x, y0 + Math.sin(x * .012 + t * (1.1 + layer * .4) + layer * 2) * amp + Math.sin(x * .031 - t * 1.7) * amp * .4);
+      cx.lineTo(W, H); cx.fill();
+    }
+
+    // 바위와 등대 실루엣
+    const s = T.s * (W < 600 ? .8 : 1), x = T.x;
+    cx.fillStyle = '#020306';
+    cx.beginPath(); cx.moveTo(x - 140 * s, T.sea + 20 * s);
+    cx.quadraticCurveTo(x - 110 * s, T.sea - 40 * s, x - 40 * s, T.sea - 46 * s);
+    cx.lineTo(x + 50 * s, T.sea - 44 * s); cx.quadraticCurveTo(x + 120 * s, T.sea - 30 * s, x + 150 * s, T.sea + 20 * s); cx.fill();
+    cx.beginPath(); cx.moveTo(x - 30 * s, T.sea - 44 * s); cx.lineTo(x - 19 * s, T.top + 22 * s); cx.lineTo(x + 19 * s, T.top + 22 * s); cx.lineTo(x + 30 * s, T.sea - 44 * s); cx.fill();
+    cx.fillRect(x - 26 * s, T.top + 16 * s, 52 * s, 7 * s);                      // 난간
+    cx.fillStyle = `rgba(255,200,140,${.55 + .45 * face})`; cx.fillRect(x - 12 * s, T.top - 6 * s, 24 * s, 22 * s);   // 등롱
+    cx.fillStyle = '#020306'; cx.beginPath(); cx.moveTo(x - 16 * s, T.top - 6 * s); cx.quadraticCurveTo(x, T.top - 30 * s, x + 16 * s, T.top - 6 * s); cx.fill();
+    cx.fillStyle = 'rgba(255,170,90,.75)'; cx.fillRect(x - 3 * s, T.top + 110 * s, 6 * s, 9 * s);   // 관리인 방 창문
+  }
+
+  let last = performance.now(), t = 3;
+  function frame(now) {
+    const dt = Math.min((now - last) / 1000, .05); last = now; t += dt;
+    for (const d of drops) { d.y += d.v * dt; d.x -= d.v * .35 * dt; if (d.y > H) { d.y = -20; d.x = Math.random() * (W + 200); } }
+    nextFlash -= dt;
+    if (nextFlash < 0) { flash = .9; nextFlash = 6 + Math.random() * 10; }
+    flash *= Math.pow(.02, dt); if (Math.random() < .02 && flash > .3) flash += .3;
+    draw(t);
+    if (!document.hidden) requestAnimationFrame(frame);
+  }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && !still) { last = performance.now(); requestAnimationFrame(frame); } });
+  if (still) draw(2.2); else requestAnimationFrame(frame);
+  addEventListener('resize', () => { if (still) draw(2.2); });
+})();
+</script>
+</body>
+</html>
